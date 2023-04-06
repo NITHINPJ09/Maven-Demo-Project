@@ -1,0 +1,78 @@
+pipeline {
+    agent any 
+    tools {
+        terraform 'Terraform-1.4.2'
+    }
+    stages {
+        
+        stage('Run CI?') {
+          steps {
+            script {
+              sh 'git log -1'
+              if (sh(script: "git log -1 | grep '.*\\[ci skip\\].*'", returnStatus: true) == 0) {
+                currentBuild.result = 'NOT_BUILT'
+                error "'[ci skip]' found in git commit message. Aborting..."
+              }
+            }
+          }
+        } 
+        
+        stage('---Version---') { 
+            steps {
+                sh 'mvn -version'
+            }
+        }   
+                     
+        stage('---Clean---') { 
+            steps {
+                sh 'mvn clean'
+            }
+        }
+        
+        stage('---Test---') { 
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('---Package---') { 
+            steps {
+                sh 'mvn assembly:single'
+            }
+        }
+        
+        stage('---Infrastructure Provisioning---') { 
+            environment {
+                TF_VAR_ASI = credentials('AZURE_SUBSCRIPTION_ID')
+                TF_VAR_ACI = credentials('AZURE_CLIENT_ID')
+                TF_VAR_ACS = credentials('AZURE_CLIENT_SECRET')
+                TF_VAR_ATI = credentials('AZURE_TENANT_ID')
+                ASAK = credentials('AZURE_STORAGE_ACCESS_KEY')
+            }
+            steps {
+                sh '''terraform init -backend-config="access_key=$ASAK"
+                terraform apply -auto-approve'''
+            }
+        }        
+        
+        stage('---Deployment---') {
+            steps {
+                sh 'chmod 400 linuxkey.pem'
+                script {
+                    def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
+                    env.PUBLIC_IP = IP.replaceAll('"','')
+                }
+                sh '''ssh -i linuxkey.pem -o StrictHostKeyChecking=accept-new -T linuxusr@$PUBLIC_IP <<EOF
+                echo "Testing..."
+                whoami
+                sudo apt-get update
+                sudo apt-get install -y openjdk-11-jdk
+                java --version
+                exit
+                EOF'''
+                sh 'scp -i linuxkey.pem -o StrictHostKeyChecking=accept-new target/Calculator-1.0-SNAPSHOT-jar-with-dependencies.jar linuxusr@$PUBLIC_IP:/home/linuxusr'
+            }
+        }     
+             
+    }
+}

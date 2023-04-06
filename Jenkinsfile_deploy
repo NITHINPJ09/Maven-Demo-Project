@@ -1,0 +1,50 @@
+pipeline {
+    agent any 
+    stages {
+        
+        stage('Run CI?') {
+          steps {
+            script {
+              sh 'git log -1'
+              if (sh(script: "git log -1 | grep '.*\\[ci skip\\].*'", returnStatus: true) == 0) {
+                currentBuild.result = 'NOT_BUILT'
+                error "'[ci skip]' found in git commit message. Aborting..."
+              }
+            }
+          }
+        } 
+        
+        stage('---Version---') { 
+            steps {
+                sh 'mvn -version'
+            }
+        }   
+                     
+        stage('---Clean---') { 
+            steps {
+                sh 'mvn clean'
+            }
+        }
+        
+        stage('---Test---') { 
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('---Package---') { 
+            steps {
+                sh 'mvn assembly:single'
+            }
+        }
+        
+        stage('---Deployment---') { 
+            steps {
+                sshagent(['server_id']) {
+                    sh 'scp -o StrictHostKeyChecking=accept-new target/Calculator-1.0-SNAPSHOT-jar-with-dependencies.jar azureuser@20.163.225.176:/home/azureuser'
+                }
+            }
+        }
+             
+    }
+}
