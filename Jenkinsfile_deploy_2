@@ -50,7 +50,7 @@ pipeline {
                 ARM_ACCESS_KEY = credentials('AZURE_STORAGE_ACCESS_KEY')
             }
             steps {
-                sh '''terraform init
+                sh '''terraform init -migrate-state
                 terraform apply -auto-approve'''
             }
         }        
