@@ -8,9 +8,5 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = var.ASI
-  client_id       = var.ACI
-  client_secret   = var.ACS
-  tenant_id       = var.ATI
   features {}
 }
