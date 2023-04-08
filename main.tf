@@ -16,7 +16,7 @@ module "vm_provisioning" {
   local_file_name               = var.local_file_name
 }
 
-module "storing_private_key_in_storage_account" {
+module "sa_provisioning" {
   source                  = "./modules/storage_account"
   depends_on              = [module.vm_provisioning]
   storage_account_name    = var.storage_account_name
