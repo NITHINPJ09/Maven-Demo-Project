@@ -1,14 +1,8 @@
 variable "virtual_network_name" {
   description = "Name of the Virtual Network"
 }
-variable "virtual_network_address_space" {
-  description = "Address Space of the Virtual Network"
-}
 variable "subnet_name" {
   description = "Name of the Subnet"
-}
-variable "subnet_address_prefixes" {
-  description = "Address Prefixes of the Subnet"
 }
 variable "network_interface_name" {
   description = "Name of the Network Interface"
