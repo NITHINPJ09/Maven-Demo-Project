@@ -6,9 +6,7 @@ resource "azurerm_resource_group" "app_grp" {
 module "vm_provisioning" {
   source                        = "./modules/virtual_machine"
   virtual_network_name          = var.virtual_network_name
-  virtual_network_address_space = var.virtual_network_address_space
   subnet_name                   = var.subnet_name
-  subnet_address_prefixes       = var.subnet_address_prefixes
   network_interface_name        = var.network_interface_name
   virtual_machine_name          = var.virtual_machine_name
   username                      = var.username
