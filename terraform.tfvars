@@ -1,5 +1,5 @@
 resource_group_name           = "app-grp"
-resource_group_location       = "East US"
+resource_group_location       = "eastus"
 virtual_network_name          = "app-network"
 subnet_name                   = "SubnetA"
 network_interface_name        = "app-interface"
