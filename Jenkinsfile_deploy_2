@@ -43,14 +43,14 @@ pipeline {
         
         stage('---Infrastructure Provisioning---') { 
             environment {
-                TF_VAR_ASI = credentials('AZURE_SUBSCRIPTION_ID')
-                TF_VAR_ACI = credentials('AZURE_CLIENT_ID')
-                TF_VAR_ACS = credentials('AZURE_CLIENT_SECRET')
-                TF_VAR_ATI = credentials('AZURE_TENANT_ID')
-                ASAK = credentials('AZURE_STORAGE_ACCESS_KEY')
+                ARM_SUBSCRIPTION_ID = credentials('AZURE_SUBSCRIPTION_ID')
+                ARM_TENANT_ID = credentials('AZURE_TENANT_ID')
+                ARM_CLIENT_ID = credentials('AZURE_CLIENT_ID')
+                ARM_CLIENT_SECRET = credentials('AZURE_CLIENT_SECRET')       
+                ARM_ACCESS_KEY = credentials('AZURE_STORAGE_ACCESS_KEY')
             }
             steps {
-                sh '''terraform init -backend-config="access_key=$ASAK"
+                sh '''terraform init
                 terraform apply -auto-approve'''
             }
         }        
