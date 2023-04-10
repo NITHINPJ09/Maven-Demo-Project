@@ -51,19 +51,18 @@ pipeline {
             }
             steps {
                 sh '''terraform init
-                terraform apply -auto-approve'''
-            }
-        }        
-        
-        stage('---Deployment---') {
-            steps {
-                sh 'chmod 400 linuxkey.pem'
+                terraform apply -auto-approve
+                chmod 600 linuxkey.pem'''
                 script {
                     def IP = sh(script: "terraform output public_ip", returnStdout: true).trim()
                     env.PUBLIC_IP = IP.replaceAll('"','')
                 }
+            }
+        }       
+        
+        stage('---Deployment---') {
+            steps {
                 sh '''ssh -i linuxkey.pem -o StrictHostKeyChecking=accept-new -T linuxusr@$PUBLIC_IP <<EOF
-                echo "Testing..."
                 whoami
                 sudo apt-get update
                 sudo apt-get install -y openjdk-11-jdk
@@ -72,7 +71,7 @@ pipeline {
                 EOF'''
                 sh 'scp -i linuxkey.pem -o StrictHostKeyChecking=accept-new target/Calculator-1.0-SNAPSHOT-jar-with-dependencies.jar linuxusr@$PUBLIC_IP:/home/linuxusr'
             }
-        }     
+        }   
              
     }
 }
