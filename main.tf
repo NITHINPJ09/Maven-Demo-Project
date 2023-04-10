@@ -7,6 +7,7 @@ module "vm_provisioning" {
   source                        = "./modules/virtual_machine"
   virtual_network_name          = var.virtual_network_name
   subnet_name                   = var.subnet_name
+  network_security_group_name   = var.network_security_group_name
   network_interface_name        = var.network_interface_name
   virtual_machine_name          = var.virtual_machine_name
   username                      = var.username
