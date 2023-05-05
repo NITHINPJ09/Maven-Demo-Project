@@ -43,7 +43,7 @@ pipeline {
                 SERVER_CREDS = credentials('Server-Credentials')
             }
             steps {
-                sh 'scp -i $SERVER_CREDS -o StrictHostKeyChecking=accept-new target/Calculator-1.0-SNAPSHOT-jar-with-dependencies.jar $SERVER_CREDS_USR@20.232.137.164:/home/azureuser'
+                sh 'scp -i $SERVER_CREDS -o StrictHostKeyChecking=accept-new target/Calculator-1.0-SNAPSHOT-jar-with-dependencies.jar $SERVER_CREDS_USR@20.124.6.134:/home/azureuser'
             }
         }
              
