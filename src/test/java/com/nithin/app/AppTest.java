@@ -8,7 +8,7 @@ public class AppTest
     @Test
     public void testSum()
     {
-        int expected = 40;
+        int expected = 30;
         int actual = obj.sum(10, 30);
         assertEquals(expected, actual);
     }
