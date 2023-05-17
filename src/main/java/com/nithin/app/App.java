@@ -7,7 +7,7 @@ public class App
 {
     public static void main(String[] args)
     {
-        System.out.println("<<---PROGRAM FOR ADDING TWO NUMBERS--->>");
+        System.out.println("<<<---PROGRAM FOR ADDING TWO NUMBERS--->>>");
         App obj = new App();
         int x, y, result;  
         Scanner sc = new Scanner(System.in);  
