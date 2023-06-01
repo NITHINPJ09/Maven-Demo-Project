@@ -65,7 +65,7 @@ pipeline {
                 sh '''ssh -i linuxkey.pem -o StrictHostKeyChecking=accept-new -T linuxusr@$PUBLIC_IP <<EOF
                 whoami
                 sudo apt-get update
-                sudo apt-get install -y openjdk-11-jdk
+                sudo apt-get install -y openjdk-11-jre
                 java --version
                 exit
                 EOF'''
