@@ -35,7 +35,7 @@ pipeline {
         stage('---SonarQube Analysis---') { 
             steps {
                 withSonarQubeEnv('SQ1') {
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/my-reports/jacoco.xml'
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.organization=test-project-for-devops -Dsonar.coverage.jacoco.xmlReportPaths=target/my-reports/jacoco.xml'
                 }
             }
         }
@@ -46,7 +46,7 @@ pipeline {
                     waitForQualityGate abortPipeline: true
                 }
             }
-        }    
+        }     
 
     }
 }
